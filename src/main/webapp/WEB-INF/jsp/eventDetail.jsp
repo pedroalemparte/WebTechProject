@@ -26,9 +26,34 @@
         <span class="badge ${event.virtual ? 'bg-info' : 'bg-success'}">
             ${event.virtual ? 'Virtual' : 'In-person'}
         </span>
+
+        <%-- ↓ REEMPLAZA el <div class="mt-4"> que tenías con esto ↓ --%>
         <div class="mt-4">
-            <button class="btn btn-primary">Register for this event</button>
+            <c:choose>
+                <c:when test="${not empty sessionScope.user}">
+                    <c:choose>
+                        <c:when test="${param.registered == 'true'}">
+                            <div class="alert alert-success">
+                                ✓ You are registered for this event!
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="/WebTechProject/events/${event.id}/register"
+                               class="btn btn-primary">
+                                Register for this event
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+                </c:when>
+                <c:otherwise>
+                    <p>
+                        <a href="/WebTechProject/login">Log in</a>
+                        to register for this event.
+                    </p>
+                </c:otherwise>
+            </c:choose>
         </div>
+
     </div>
 </div>
 </body>
