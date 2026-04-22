@@ -102,14 +102,14 @@ public class EventController {
 
         if (registrationDAO.isAlreadyRegistered(user.getId(), eventId)) {
             model.addAttribute("event", event);
-            model.addAttribute("error", "Ya estás registrado en este evento.");
+            model.addAttribute("error", "You are already registered for this event.");
             return "registerToEvent";
         }
 
         int registered = registrationDAO.countRegistrations(eventId);
         if (registered >= event.getCapacity()) {
             model.addAttribute("event", event);
-            model.addAttribute("error", "El evento está lleno.");
+            model.addAttribute("error", "This event is full.");
             return "registerToEvent";
         }
 
@@ -119,7 +119,7 @@ public class EventController {
             return "redirect:/events/" + eventId + "?registered=true";
         } else {
             model.addAttribute("event", event);
-            model.addAttribute("error", "Error al registrarse. Intenta de nuevo.");
+            model.addAttribute("error", "Registration failed. Please try again.");
             return "registerToEvent";
         }
     }
