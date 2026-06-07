@@ -54,13 +54,13 @@ public class AdminDAO {
 
     public List<EventRow> getAllEvents() {
         List<EventRow> list = new ArrayList<>();
-        String sql = "SELECT e.id, e.title, e.date_time, e.location, e.virtual, " +
+        String sql = "SELECT e.id, e.title, e.date_time, e.location, e.is_virtual, " +
                      "u.full_name AS organizer_name, " +
                      "COUNT(r.id) AS registration_count, e.capacity " +
                      "FROM events e " +
                      "JOIN users u ON u.id = e.organizer_id " +
                      "LEFT JOIN registrations r ON r.event_id = e.id " +
-                     "GROUP BY e.id, e.title, e.date_time, e.location, e.virtual, u.full_name " +
+                     "GROUP BY e.id, e.title, e.date_time, e.location, e.is_virtual, u.full_name " +
                      "ORDER BY e.date_time DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -72,7 +72,7 @@ public class AdminDAO {
                     rs.getString("title"),
                     dt,
                     rs.getString("location"),
-                    rs.getBoolean("virtual"),
+                    rs.getBoolean("is_virtual"),
                     rs.getString("organizer_name"),
                     rs.getInt("registration_count"),
                     rs.getInt("capacity")
