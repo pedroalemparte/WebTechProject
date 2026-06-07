@@ -1,7 +1,5 @@
 package com.webtechproject.dao;
 
-import com.webtechproject.dao.DBConnection;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,12 +37,13 @@ public class AdminDAO {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                OrganizerRow row = new OrganizerRow();
-                row.id = rs.getInt("id");
-                row.fullName = rs.getString("full_name");
-                row.email = rs.getString("email");
-                row.eventCount = rs.getInt("event_count");
-                row.registrationCount = rs.getInt("registration_count");
+                OrganizerRow row = new OrganizerRow(
+                    rs.getInt("id"),
+                    rs.getString("full_name"),
+                    rs.getString("email"),
+                    rs.getInt("event_count"),
+                    rs.getInt("registration_count")
+                );
                 list.add(row);
             }
         } catch (Exception e) {
@@ -67,15 +66,17 @@ public class AdminDAO {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                EventRow row = new EventRow();
-                row.id = rs.getInt("id");
-                row.title = rs.getString("title");
-                row.dateTime = rs.getTimestamp("date_time").toLocalDateTime().toString().replace("T", " ").substring(0, 16);
-                row.location = rs.getString("location");
-                row.isVirtual = rs.getBoolean("virtual");
-                row.organizerName = rs.getString("organizer_name");
-                row.registrationCount = rs.getInt("registration_count");
-                row.capacity = rs.getInt("capacity");
+                String dt = rs.getTimestamp("date_time").toLocalDateTime().toString().replace("T", " ").substring(0, 16);
+                EventRow row = new EventRow(
+                    rs.getInt("id"),
+                    rs.getString("title"),
+                    dt,
+                    rs.getString("location"),
+                    rs.getBoolean("virtual"),
+                    rs.getString("organizer_name"),
+                    rs.getInt("registration_count"),
+                    rs.getInt("capacity")
+                );
                 list.add(row);
             }
         } catch (Exception e) {
@@ -108,21 +109,56 @@ public class AdminDAO {
     }
 
     public static class OrganizerRow {
-        public int id;
-        public String fullName;
-        public String email;
-        public int eventCount;
-        public int registrationCount;
+        private final int id;
+        private final String fullName;
+        private final String email;
+        private final int eventCount;
+        private final int registrationCount;
+
+        public OrganizerRow(int id, String fullName, String email, int eventCount, int registrationCount) {
+            this.id = id;
+            this.fullName = fullName;
+            this.email = email;
+            this.eventCount = eventCount;
+            this.registrationCount = registrationCount;
+        }
+
+        public int getId() { return id; }
+        public String getFullName() { return fullName; }
+        public String getEmail() { return email; }
+        public int getEventCount() { return eventCount; }
+        public int getRegistrationCount() { return registrationCount; }
     }
 
     public static class EventRow {
-        public int id;
-        public String title;
-        public String dateTime;
-        public String location;
-        public boolean isVirtual;
-        public String organizerName;
-        public int registrationCount;
-        public int capacity;
+        private final int id;
+        private final String title;
+        private final String dateTime;
+        private final String location;
+        private final boolean isVirtual;
+        private final String organizerName;
+        private final int registrationCount;
+        private final int capacity;
+
+        public EventRow(int id, String title, String dateTime, String location,
+                        boolean isVirtual, String organizerName, int registrationCount, int capacity) {
+            this.id = id;
+            this.title = title;
+            this.dateTime = dateTime;
+            this.location = location;
+            this.isVirtual = isVirtual;
+            this.organizerName = organizerName;
+            this.registrationCount = registrationCount;
+            this.capacity = capacity;
+        }
+
+        public int getId() { return id; }
+        public String getTitle() { return title; }
+        public String getDateTime() { return dateTime; }
+        public String getLocation() { return location; }
+        public boolean isVirtual() { return isVirtual; }
+        public String getOrganizerName() { return organizerName; }
+        public int getRegistrationCount() { return registrationCount; }
+        public int getCapacity() { return capacity; }
     }
 }
